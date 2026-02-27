@@ -1,0 +1,48 @@
+:root {
+  --primary: #0f2f5a;
+  --accent: #f4b400;
+}
+
+* { box-sizing: border-box; font-family: Inter, Arial, sans-serif; }
+body { margin: 0; background: transparent; color: white; }
+
+.hidden { display: none !important; }
+
+#app {
+  width: 90vw;
+  height: 90vh;
+  margin: 5vh auto;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+  background: linear-gradient(rgba(5, 18, 35, 0.92), rgba(5, 18, 35, 0.92)), url('./westhaven-logo.svg') center/contain no-repeat;
+}
+
+aside { background: rgba(15,47,90,0.9); padding: 1rem; display: flex; flex-direction: column; gap: 8px; }
+main { padding: 1rem; overflow-y: auto; }
+button {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+button:hover { border-color: var(--accent); }
+input, textarea, select {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.25);
+  color: white;
+}
+.card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 12px;
+}
