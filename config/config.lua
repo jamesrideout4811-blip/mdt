@@ -15,7 +15,8 @@ Config.Access = {
     doj = { 'doj', 'lawyer' }
 }
 
-Config.MDTCommand = 'mdt'
+Config.MDTCommand = 'MDT'
+Config.MDTCommandAliases = { 'mdt' }
 Config.BackgroundLogo = 'assets/westhaven-logo.svg'
 Config.Theme = {
     primary = '#0f2f5a',
@@ -148,5 +149,6 @@ Config.Database = {
     incidents = 'wh_mdt_incidents',
     bulletins = 'wh_mdt_bulletins',
     dovs = 'wh_mdt_dovs',
-    registrations = 'wh_mdt_registrations'
+    registrations = 'wh_mdt_registrations',
+    licenseActions = 'wh_mdt_license_actions'
 }

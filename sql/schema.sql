@@ -43,3 +43,16 @@ CREATE TABLE IF NOT EXISTS `wh_mdt_registrations` (
   `issued_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `expires_at` TIMESTAMP NULL
 );
+
+CREATE TABLE IF NOT EXISTS `wh_mdt_license_actions` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `author` VARCHAR(80) NOT NULL,
+  `subject_name` VARCHAR(120) NOT NULL,
+  `subject_cid` VARCHAR(80) NULL,
+  `license_type` VARCHAR(32) NOT NULL,
+  `action` VARCHAR(32) NOT NULL,
+  `reason` VARCHAR(255) NOT NULL,
+  `notes` LONGTEXT NULL,
+  `expires_at` TIMESTAMP NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
