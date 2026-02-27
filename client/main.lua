@@ -1,6 +1,6 @@
 local isOpen = false
 
-RegisterCommand(Config.MDTCommand, function()
+local function toggleMdt()
     isOpen = not isOpen
     SetNuiFocus(isOpen, isOpen)
     SendNUIMessage({
@@ -11,7 +11,15 @@ RegisterCommand(Config.MDTCommand, function()
     if isOpen then
         TriggerServerEvent('westhaven_mdt:server:getBootstrap')
     end
-end, false)
+end
+
+RegisterCommand(Config.MDTCommand, toggleMdt, false)
+
+for _, alias in ipairs(Config.MDTCommandAliases or {}) do
+    if alias ~= Config.MDTCommand then
+        RegisterCommand(alias, toggleMdt, false)
+    end
+end
 
 RegisterNUICallback('close', function(_, cb)
     isOpen = false
@@ -58,6 +66,16 @@ end)
 
 RegisterNUICallback('assignCommunityService', function(data, cb)
     TriggerServerEvent('westhaven_mdt:server:assignCommunityService', data)
+    cb({ ok = true })
+end)
+
+RegisterNUICallback('createLicenseAction', function(data, cb)
+    TriggerServerEvent('westhaven_mdt:server:createLicenseAction', data)
+    cb({ ok = true })
+end)
+
+RegisterNUICallback('refreshBootstrap', function(_, cb)
+    TriggerServerEvent('westhaven_mdt:server:getBootstrap')
     cb({ ok = true })
 end)
 
