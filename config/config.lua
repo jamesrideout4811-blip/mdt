@@ -15,7 +15,8 @@ Config.Access = {
     doj = { 'doj', 'lawyer' }
 }
 
-Config.MDTCommand = 'mdt'
+Config.MDTCommand = 'MDT'
+Config.MDTCommandAliases = { 'mdt' }
 Config.BackgroundLogo = 'assets/westhaven-logo.svg'
 Config.Theme = {
     primary = '#0f2f5a',
@@ -92,6 +93,85 @@ Config.Dispatch = {
     }
 }
 
+
+Config.Impound = {
+    provider = 'sql', -- sql | custom | qs_advancedgarages | cd_garage | t1ger_garage
+    adapters = {
+        sql = {
+            type = 'sql',
+            -- expected aliases: plate, owner, model, impounded_at, impounded_by, reason, release_fee, remaining_minutes, lot
+            query = [[
+                SELECT
+                    plate,
+                    owner_cid AS owner,
+                    category AS model,
+                    issued_at AS impounded_at,
+                    registered_by AS impounded_by,
+                    'Vehicle hold' AS reason,
+                    fee AS release_fee,
+                    TIMESTAMPDIFF(MINUTE, NOW(), expires_at) AS remaining_minutes,
+                    'city_impound' AS lot
+                FROM wh_mdt_registrations
+                WHERE expires_at IS NOT NULL
+            ]]
+        },
+        custom = {
+            type = 'event',
+            event = 'westhaven_mdt:server:impoundStatus'
+        },
+        qs_advancedgarages = {
+            type = 'sql',
+            query = [[
+                SELECT
+                    plate,
+                    citizenid AS owner,
+                    vehicle AS model,
+                    impounded_at,
+                    impounded_by,
+                    reason,
+                    fee AS release_fee,
+                    TIMESTAMPDIFF(MINUTE, NOW(), release_date) AS remaining_minutes,
+                    garage AS lot
+                FROM player_vehicles
+                WHERE state = 2
+            ]]
+        },
+        cd_garage = {
+            type = 'sql',
+            query = [[
+                SELECT
+                    plate,
+                    citizenid AS owner,
+                    vehicle AS model,
+                    pound_time AS impounded_at,
+                    pound_author AS impounded_by,
+                    pound_reason AS reason,
+                    pound_fee AS release_fee,
+                    TIMESTAMPDIFF(MINUTE, NOW(), pound_release) AS remaining_minutes,
+                    pound_lot AS lot
+                FROM cd_garage
+                WHERE impounded = 1
+            ]]
+        },
+        t1ger_garage = {
+            type = 'sql',
+            query = [[
+                SELECT
+                    plate,
+                    owner,
+                    model,
+                    impounded_at,
+                    impounded_by,
+                    reason,
+                    release_fee,
+                    TIMESTAMPDIFF(MINUTE, NOW(), release_at) AS remaining_minutes,
+                    lot
+                FROM t1ger_impound
+            ]]
+        }
+    }
+}
+
 Config.Training = {
     enabled = true,
     modules = {
@@ -148,5 +228,6 @@ Config.Database = {
     incidents = 'wh_mdt_incidents',
     bulletins = 'wh_mdt_bulletins',
     dovs = 'wh_mdt_dovs',
-    registrations = 'wh_mdt_registrations'
+    registrations = 'wh_mdt_registrations',
+    licenseActions = 'wh_mdt_license_actions'
 }

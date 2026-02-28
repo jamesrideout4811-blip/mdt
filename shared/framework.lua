@@ -68,8 +68,8 @@ function Framework:GetCharacterBySource(src)
         citizenId = ('standalone_%s'):format(src),
         firstname = ('Unit%s'):format(src),
         lastname = '',
-        job = 'police',
-        grade = 99
+        job = 'civilian',
+        grade = 0
     }
 end
 

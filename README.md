@@ -9,11 +9,13 @@ One resource for Police, Ambulance, and DOJ with cross-framework support:
 
 ## Features
 
-- Unified command MDT UI (`/mdt`)
+- Unified command MDT UI (`/MDT`, plus configurable aliases)
 - Reports / Incidents / Bulletins / DOVs / Registrations
+- Gun + vehicle licensing actions (disqualifications, revocations, suspensions, reinstatements)
 - Fines + jail sentencing from MDT
 - RCORE prison integration for jail + community service sentencing
 - RCORE custody feed tab to view who is jailed / in service and remaining time/actions
+- Impound lookup tab with adapter compatibility for common/advanced impound systems
 - PS-Dispatch compatible + generic adapter pattern for other dispatch scripts
 - PD training guide tab with basic patrol, traffic stops, crossfire survival, CIU, and SWAT tips
 - Hire / fire / promote / demote event pipeline

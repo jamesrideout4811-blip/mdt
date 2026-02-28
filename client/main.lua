@@ -1,21 +1,33 @@
 local isOpen = false
 
-RegisterCommand(Config.MDTCommand, function()
-    isOpen = not isOpen
-    SetNuiFocus(isOpen, isOpen)
+local function setMdtState(state)
+    isOpen = state
+    SetNuiFocus(state, state)
     SendNUIMessage({
         action = 'toggle',
-        state = isOpen
+        state = state
     })
+end
 
+local function toggleMdt()
     if isOpen then
-        TriggerServerEvent('westhaven_mdt:server:getBootstrap')
+        setMdtState(false)
+        return
     end
-end, false)
+
+    TriggerServerEvent('westhaven_mdt:server:requestOpen')
+end
+
+RegisterCommand(Config.MDTCommand, toggleMdt, false)
+
+for _, alias in ipairs(Config.MDTCommandAliases or {}) do
+    if alias ~= Config.MDTCommand then
+        RegisterCommand(alias, toggleMdt, false)
+    end
+end
 
 RegisterNUICallback('close', function(_, cb)
-    isOpen = false
-    SetNuiFocus(false, false)
+    setMdtState(false)
     cb({ ok = true })
 end)
 
@@ -61,6 +73,32 @@ RegisterNUICallback('assignCommunityService', function(data, cb)
     cb({ ok = true })
 end)
 
+RegisterNUICallback('getImpounds', function(data, cb)
+    TriggerServerEvent('westhaven_mdt:server:getImpounds', data)
+    cb({ ok = true })
+end)
+
+RegisterNUICallback('createLicenseAction', function(data, cb)
+    TriggerServerEvent('westhaven_mdt:server:createLicenseAction', data)
+    cb({ ok = true })
+end)
+
+RegisterNUICallback('refreshBootstrap', function(_, cb)
+    TriggerServerEvent('westhaven_mdt:server:getBootstrap')
+    cb({ ok = true })
+end)
+
+
+RegisterNetEvent('westhaven_mdt:client:setOpenState', function(state)
+    setMdtState(state)
+end)
+
+RegisterNetEvent('westhaven_mdt:client:forceClose', function()
+    if isOpen then
+        setMdtState(false)
+    end
+end)
+
 RegisterNetEvent('westhaven_mdt:client:bootstrap', function(payload)
     SendNUIMessage({ action = 'bootstrap', payload = payload })
 end)
@@ -73,4 +111,8 @@ end)
 
 RegisterNetEvent('westhaven_mdt:client:correctionsStatus', function(payload)
     SendNUIMessage({ action = 'correctionsStatus', payload = payload })
+end)
+
+RegisterNetEvent('westhaven_mdt:client:impoundStatus', function(payload)
+    SendNUIMessage({ action = 'impoundStatus', payload = payload })
 end)
