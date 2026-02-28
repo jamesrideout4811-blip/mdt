@@ -59,8 +59,10 @@ local function applyFilters(rows, filters)
 end
 
 function ImpoundAdapter:GetImpounds(filters)
-    local provider = Config.Impound.provider
-    local adapter = Config.Impound.adapters[provider]
+    local impoundConfig = Config.Impound or {}
+    local provider = impoundConfig.provider or 'custom'
+    local adapters = impoundConfig.adapters or {}
+    local adapter = adapters[provider]
 
     if not adapter then
         print(('[Westhaven MDT] Missing impound adapter for %s'):format(tostring(provider)))

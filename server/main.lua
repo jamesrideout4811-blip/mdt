@@ -383,6 +383,12 @@ RegisterNetEvent('westhaven_mdt:server:getImpounds', function(filters)
     local src = source
     if not requireMdtAccess(src) then return end
 
+    if not ImpoundAdapter or not ImpoundAdapter.GetImpounds then
+        TriggerClientEvent('westhaven_mdt:client:notify', src, 'Impound adapter is not configured.')
+        TriggerClientEvent('westhaven_mdt:client:impoundStatus', src, {})
+        return
+    end
+
     local data = ImpoundAdapter:GetImpounds(filters or {})
     TriggerClientEvent('westhaven_mdt:client:impoundStatus', src, data)
 end)
