@@ -19,6 +19,7 @@ One resource for Police, Ambulance, and DOJ with cross-framework support:
 - PS-Dispatch compatible + generic adapter pattern for other dispatch scripts
 - PD training guide tab with basic patrol, traffic stops, crossfire survival, CIU, and SWAT tips
 - Hire / fire / promote / demote event pipeline
+- Call sign menu for officer unit ID management
 - Configurable theme + background logo
 
 ## Install

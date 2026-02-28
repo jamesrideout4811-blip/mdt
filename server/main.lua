@@ -1,4 +1,5 @@
 local tables = Config.Database
+local callsigns = {}
 
 local function ensureTables()
     MySQL.query(([[
@@ -101,7 +102,8 @@ local function getActiveWorkers()
                 source = tonumber(src),
                 name = (c.firstname .. ' ' .. c.lastname),
                 job = c.job,
-                grade = c.grade
+                grade = c.grade,
+                callsign = callsigns[tonumber(src)]
             }
         end
     end
@@ -118,7 +120,8 @@ local function getOnlinePeople()
                 citizenId = c.citizenId,
                 name = (c.firstname .. ' ' .. c.lastname),
                 job = c.job,
-                grade = c.grade
+                grade = c.grade,
+                callsign = callsigns[tonumber(src)]
             }
         end
     end
@@ -219,12 +222,33 @@ local function sendBootstrap(src)
         logo = Config.BackgroundLogo,
         theme = Config.Theme,
         training = Config.Training,
-        licenseActions = getRecentLicenseActions()
+        licenseActions = getRecentLicenseActions(),
+        callsign = callsigns[src]
     }
 
     TriggerClientEvent('westhaven_mdt:client:bootstrap', src, payload)
     return true
 end
+
+
+RegisterNetEvent('westhaven_mdt:server:setCallsign', function(data)
+    local src = source
+    if not requireMdtAccess(src) then return end
+
+    local value = tostring((data and data.callsign) or ''):gsub('[^%w%-%s]', ''):sub(1, 24)
+    if value == '' then
+        callsigns[src] = nil
+    else
+        callsigns[src] = value
+    end
+
+    TriggerClientEvent('westhaven_mdt:client:notify', src, 'Call sign updated.')
+    sendBootstrap(src)
+end)
+
+AddEventHandler('playerDropped', function()
+    callsigns[source] = nil
+end)
 
 RegisterNetEvent('westhaven_mdt:server:requestOpen', function()
     local src = source

@@ -88,6 +88,11 @@ RegisterNUICallback('refreshBootstrap', function(_, cb)
     cb({ ok = true })
 end)
 
+RegisterNUICallback('setCallsign', function(data, cb)
+    TriggerServerEvent('westhaven_mdt:server:setCallsign', data)
+    cb({ ok = true })
+end)
+
 
 RegisterNetEvent('westhaven_mdt:client:setOpenState', function(state)
     setMdtState(state)
